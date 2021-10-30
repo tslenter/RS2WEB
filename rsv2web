@@ -137,7 +137,7 @@ function rm_laravel()
    mysql --execute="DROP USER 'rs'@'localhost';" > /dev/null 2>&1
    rm -rf $APACHEDIR/* > /dev/null 2>&1
    rm -rf $APACHEDIR/.* > /dev/null 2>&1
-   apt remove -y composer mysql-server
+   apt remove -y mysql-server
 }
 
 function display_values()
