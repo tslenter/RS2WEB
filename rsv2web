@@ -21,6 +21,7 @@
 #E-mail: info@remotesyslog.com
 
 # This function checks whether the install script is executed with root privileges.
+
 function check_root()
 {
     if ! [ $(id -u) = 0 ]; then
@@ -34,7 +35,7 @@ function set_parameters()
 {
     PASS=$(date +%s | sha256sum | base64 | head -c 32 ; echo)
     APACHEDIR=/var/www/html
-    RSDEST=/opt/RS
+    RSDEST=/opt/RS2WEB
 }
 
 # This function checks whether the $1 package is installed.
@@ -93,7 +94,7 @@ function install_php_modules()
 # This function creates and activates a new site on Apache for Laravel.
 function create_rsv2_apache_site()
 {
-   cp $RSDEST/plugins/rsl/rsv2-default.conf /etc/apache2/sites-available/
+   cp $RSDEST/rsv2-default.conf /etc/apache2/sites-available/
    a2ensite rsv2-default
    a2dissite 000-default
    service apache2 restart
@@ -130,7 +131,6 @@ function install_rsv2_project()
 
 function rm_laravel()
 {
-   a2dissite rsl-default > /dev/null 2>&1
    a2dissite rsv2-default > /dev/null 2>&1
    userdel -r rs > /dev/null 2>&1
    mysql --execute="DROP DATABASE laravel;" > /dev/null 2>&1
