@@ -35,7 +35,7 @@ function set_parameters()
 {
     PASS=$(date +%s | sha256sum | base64 | head -c 32 ; echo)
     APACHEDIR=/var/www/html
-    RSDEST=/opt/RS2WEB
+    RSTMP=/tmp/RS2WEB_GIT
 }
 
 # This function checks whether the $1 package is installed.
@@ -94,7 +94,7 @@ function install_php_modules()
 # This function creates and activates a new site on Apache for Laravel.
 function create_rsv2_apache_site()
 {
-   cp $RSDEST/rsv2-default.conf /etc/apache2/sites-available/
+   cp $RSTMP/rsv2-default.conf /etc/apache2/sites-available/
    a2ensite rsv2-default
    a2dissite 000-default
    service apache2 restart
