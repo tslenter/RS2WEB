@@ -138,6 +138,7 @@ function rm_laravel()
    rm -rf $APACHEDIR/* > /dev/null 2>&1
    rm -rf $APACHEDIR/.* > /dev/null 2>&1
    apt remove -y mysql-server
+   service apache2 reload
 }
 
 function display_values()
