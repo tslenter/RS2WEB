@@ -99,14 +99,6 @@ function create_rsv2_apache_site()
    service apache2 restart
 }
 
-function create_rsl_apache_site()
-{
-   cp $RSDEST/plugins/rsl/rsl-default.conf /etc/apache2/sites-available/
-   a2ensite rsl-default.conf
-   a2dissite 000-default
-   service apache2 restart
-}
-
 # This function creates the rs user for MySQL
 function install_mysql()
 {
