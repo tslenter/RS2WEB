@@ -6,29 +6,32 @@ Usage
 Installation
 ------------
 
-To use Lumache, first install it using pip:
+To use RSv2, first the masterscript:
 
 .. code-block:: console
 
-   (.venv) $ pip install lumache
+   git clone https://www.github.com/tslenter/RS
 
-Creating recipes
+Run the installation:
 ----------------
 
-To retrieve a list of random ingredients,
-you can use the ``lumache.get_random_ingredients()`` function:
+Run the script masterscript as following:
 
-.. autofunction:: lumache.get_random_ingredients
+.. code-block:: console
 
-The ``kind`` parameter should be either ``"meat"``, ``"fish"``,
-or ``"veggies"``. Otherwise, :py:func:`lumache.get_random_ingredients`
-will raise an exception.
+   cd RS
+   sudo ./rseinstaller
+   
+Select the following options to install the correct core:
 
-.. autoexception:: lumache.InvalidKindError
+.. code-block:: console
 
-For example:
+   Option 1 => RSE Core installation
+   Option 1 => Core installation
+   
+Select the following options to install the RSv2 webinterface:
 
->>> import lumache
->>> lumache.get_random_ingredients()
-['shells', 'gorgonzola', 'parsley']
+.. code-block:: console
 
+   Option 3 => RSv2 webinterface installation
+   Option 1 => RSv2 installation
