@@ -12,7 +12,7 @@ To use RSv2, first the masterscript:
 
    git clone https://www.github.com/tslenter/RS
 
-Run the installation:
+Run the installation
 ----------------
 
 Run the script masterscript as following:
