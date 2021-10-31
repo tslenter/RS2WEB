@@ -6,7 +6,7 @@ Usage
 Installation
 ------------
 
-To use RSv2, first the masterscript:
+To use RSv2, download the masterscript:
 
 .. code-block:: console
 
