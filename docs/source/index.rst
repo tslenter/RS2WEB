@@ -1,4 +1,4 @@
-Welcome to RS2v2 documentation!
+Welcome to RSv2 documentation!
 ===================================
 
 Remote Syslog version 2 is a syslog viewer build on Laravel. 
