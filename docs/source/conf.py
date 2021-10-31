@@ -2,9 +2,9 @@
 
 # -- Project information
 
-project = 'Lumache'
-copyright = '2021, Graziella'
-author = 'Graziella'
+project = 'RS2WEB'
+copyright = '2021, Tom Slenter'
+author = 'Tom Slenter'
 
 release = '0.1'
 version = '0.1.0'
