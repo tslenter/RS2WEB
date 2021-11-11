@@ -15,7 +15,7 @@ To use RSv2, download the masterscript:
 Run the installation
 ----------------
 
-Run the script masterscript as following:
+Run the script masterscript as follows:
 
 .. code-block:: console
 
