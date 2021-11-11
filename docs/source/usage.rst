@@ -35,3 +35,21 @@ Select the following options to install the RSv2 webinterface:
 
    Option 3 => RSv2 webinterface installation
    Option 1 => RSv2 installation
+   
+ .. _deinstallation:
+ Deinstallation
+ ------------
+ 
+ To deinstall RSv2, run the following:
+ 
+ .. code-block:: console
+ 
+   cd RS
+   sudo ./rseinstaller
+ 
+ Select the following options to deinstall the RSv2 webinterface:
+ 
+ .. code-block:: console
+ 
+   Option 3 => RSv2 webinterface installation
+   Option 2 => RSv2 removal
