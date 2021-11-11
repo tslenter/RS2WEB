@@ -126,7 +126,7 @@ function install_rsv2_project()
 
    sed -i "s|\dummy|${PASS}|" $APACHEDIR/rsv2/.env >/dev/null 2>&1
 
-   runuser -l rs -c "cd $APACHEDIR/rsv2 && php artisan migrate"
+   runuser -l rs -c "cd $APACHEDIR/rsv2 && php artisan migrate --force"
 }
 
 function rm_laravel()
