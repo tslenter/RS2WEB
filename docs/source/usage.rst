@@ -36,7 +36,7 @@ Select the following options to install the RSv2 webinterface:
    Option 3 => RSv2 webinterface installation
    Option 1 => RSv2 installation
    
- .. _installation:
+ .. _deinstallation:
  
  Deinstallation
  --------------
