@@ -127,6 +127,10 @@ function install_rsv2_project()
    sed -i "s|\dummy|${PASS}|" $APACHEDIR/rsv2/.env >/dev/null 2>&1
 
    runuser -l rs -c "cd $APACHEDIR/rsv2 && php artisan migrate --force"
+   
+   sed -i "s|\password|${PASS}|" $APACHEDIR/rsv2/database/seeders/UserSeeder.php >/dev/null 2>&1
+   
+   php artisan db:seed --class=UserSeeder
 }
 
 function rm_laravel()
