@@ -128,7 +128,7 @@ function install_rsv2_project()
 
    runuser -l rs -c "cd $APACHEDIR/rsv2 && php artisan migrate --force"
    
-   sudo sed "s/rspassword/${PASS}/g" /var/www/html/rsv2/database/seeders/UserSeeder.php >/dev/null 2>&1
+   sed -i "s/\brspassword\b/$PASS/g" $APACHEDIR/rsv2/database/seeders/UserSeeder.php
    
    runuser -l rs -c "cd $APACHEDIR/rsv2 && php artisan db:seed --class=UserSeeder --force"
 }
