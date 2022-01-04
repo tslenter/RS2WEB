@@ -2,7 +2,7 @@
 
 #License:
 #"Remote Syslog" is a free application what can be used to view syslog messages.
-#Copyright (C) 2021 Tom Slenter
+#Copyright (C) 2022 Tom Slenter
 #
 #This program is free software: you can redistribute it and/or modify
 #it under the terms of the GNU General Public License as published by
@@ -35,7 +35,7 @@ function set_parameters()
 {
     PASS=$(date +%s | sha256sum | base64 | head -c 32 ; echo)
     APACHEDIR=/var/www/html
-    RSTMP=/tmp/RS2WEB_GIT
+    RSTMP=/tmp/RSLWEB_GIT
 }
 
 # This function checks whether the $1 package is installed.
@@ -58,8 +58,8 @@ function display_banner() {
     echo "#Remote Syslog Laravel                           #"
     echo "#More information: https://www.remotesyslog.com  #"
     echo "#Remote Syslog installation                      #"
-    echo "#Version: RSv2 0.1                               #"
-    echo "#Donations: https://github.com/tslenter/RS2WEB   #"
+    echo "#Version: RSL 0.1                                #"
+    echo "#Donations: https://github.com/tslenter/RSLWEB   #"
     echo "##################################################"
     echo "Information: Do not use this with RSX or RSC."
     echo "Only RS core with elasticsearch and ubuntu 20.x LTS is tested."
@@ -92,10 +92,10 @@ function install_php_modules()
 }
 
 # This function creates and activates a new site on Apache for Laravel.
-function create_rsv2_apache_site()
+function create_rsl_apache_site()
 {
-   cp $RSTMP/rsv2-default.conf /etc/apache2/sites-available/
-   a2ensite rsv2-default
+   cp $RSTMP/rsl-default.conf /etc/apache2/sites-available/
+   a2ensite rsl-default
    a2dissite 000-default
    service apache2 restart
 }
@@ -108,34 +108,70 @@ function install_mysql()
     mysql --execute="GRANT ALL PRIVILEGES ON laravel.* TO 'rs'@'localhost';"
 }
 
-# Installs the master version of the rsv2 Laravel project
-function install_rsv2_project()
+function install_backup_project()
 {
    rm -rf $APACHEDIR/* > /dev/null 2>&1
    rm -rf $APACHEDIR/.* > /dev/null 2>&1
-   git clone --branch develop https://github.com/tslenter/RSv2.git $APACHEDIR/rsv2
+
+   read -p 'GitHub url: ' urlgithub
+   if test "$urlgithub" = ""; then
+       echo "Sorry, GitHub URL cannot be blank" >&2
+       exit 1;
+   fi
+   read -p 'GitHub branch: ' branchgithub
+   if test "$urlgithub" = ""; then
+       echo "Sorry, GitHub branch cannot be blank" >&2
+       exit 1;
+   fi
+   echo "URL detected ..."
+   git clone --branch $branchgithub $urlgithub $APACHEDIR/rsl
 
    useradd -m -s /bin/bash -p $PASS rs
 
-   setfacl -Rm "g:www-data:rwx" $APACHEDIR/rsv2/
-   setfacl -Rm "u:rs:rwx" $APACHEDIR/rsv2/
+   setfacl -Rm "g:www-data:rwx" $APACHEDIR/rsl/
+   setfacl -Rm "u:rs:rwx" $APACHEDIR/rsl/
 
-   runuser -l rs -c "cd $APACHEDIR/rsv2 && composer update --lock && composer install"
-   runuser -l rs -c "cp $APACHEDIR/rsv2/.env.example $APACHEDIR/rsv2/.env"
-   runuser -l rs -c "cd $APACHEDIR/rsv2 && php artisan key:generate"
+   runuser -l rs -c "cd $APACHEDIR/rsl && composer update --lock && composer install"
+   runuser -l rs -c "cp $APACHEDIR/rsl/.env.example $APACHEDIR/rsl/.env"
+   runuser -l rs -c "cd $APACHEDIR/rsl && php artisan key:generate"
 
-   sed -i "s|\dummy|${PASS}|" $APACHEDIR/rsv2/.env >/dev/null 2>&1
+   sed -i "s|\dummy|${PASS}|" $APACHEDIR/rsl/.env >/dev/null 2>&1
 
    runuser -l rs -c "cd $APACHEDIR/rsv2 && php artisan migrate --force"
-   
+
    sed -i "s/\brspassword\b/$PASS/g" $APACHEDIR/rsv2/database/seeders/UserSeeder.php
-   
-   runuser -l rs -c "cd $APACHEDIR/rsv2 && php artisan db:seed --class=UserSeeder --force"
+
+   runuser -l rs -c "cd $APACHEDIR/rsl && php artisan db:seed --class=UserSeeder --force"
+}
+
+function install_clean_project()
+{
+   rm -rf $APACHEDIR/* > /dev/null 2>&1
+   rm -rf $APACHEDIR/.* > /dev/null 2>&1
+   useradd -m -s /bin/bash -p $PASS rs
+   mkdir $APACHEDIR/rsl/
+
+   #Set permissions for laravel deployment
+   setfacl -Rm "g:www-data:rwx" $APACHEDIR/rsl/
+   setfacl -Rm "u:rs:rwx" $APACHEDIR/rsl/
+
+   runuser -l rs -c "composer create-project laravel/laravel $APACHEDIR/rsl/"
+   runuser -l rs -c "cp $RSDEST/plugins/rsl/env.example $APACHEDIR/rsl/.env"
+   runuser -l rs -c "cd $APACHEDIR/rsl && composer update --lock && composer install"
+   runuser -l rs -c "cd $APACHEDIR/rsl && php artisan key:generate"
+
+   #Set permissiosn for all subfolders and files
+   setfacl -Rm "g:www-data:rwx" $APACHEDIR/rsl/
+   setfacl -Rm "u:rs:rwx" $APACHEDIR/rsl/
+
+   sed -i "s|\dummy|${PASS}|" $APACHEDIR/rsl/.env >/dev/null 2>&1
+
+#   runuser -l rs -c "cd $APACHEDIR/rsl && php artisan migrate"
 }
 
 function rm_laravel()
 {
-   a2dissite rsv2-default > /dev/null 2>&1
+   a2dissite rsl-default > /dev/null 2>&1
    userdel -r rs > /dev/null 2>&1
    mysql --execute="DROP DATABASE laravel;" > /dev/null 2>&1
    mysql --execute="DROP USER 'rs'@'localhost';" > /dev/null 2>&1
@@ -154,23 +190,35 @@ clear
 display_banner
 #Menu
 PS3='Please enter your choice: '
-options=("RSv2 installation" "RSv2 Removal" "Quit")
+options=("RSL Backup" "RSL Clean" "RSL Removal" "Quit")
 select opt in "${options[@]}"
 do
     case $opt in
-        "RSv2 installation")
+        "RSL Backup")
             clear
             display_banner
             check_root
             set_parameters
             install_php_modules
-            create_rsv2_apache_site
+            create_rsl_apache_site
             install_mysql
-            install_rsv2_project
+            install_backup_project
             display_values
             exit
     ;;
-        "RSv2 Removal")
+        "RSL Clean")
+            clear
+            display_banner
+            check_root
+            set_parameters
+            install_php_modules
+            create_rsl_apache_site
+            install_mysql
+            install_clean_project
+            display_values
+            exit
+    ;;
+        "RSL Removal")
             clear
             display_banner
             check_root
