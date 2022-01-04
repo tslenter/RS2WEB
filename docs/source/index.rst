@@ -11,7 +11,7 @@ how to :ref:`installation` the project.
 
 .. note::
 
-   This project is under active development and questions can be sent to Ronald Gerits (ronald.gerits@remotesyslog.com).
+   This project is for developement or for user who want to create there own GUI.
 
 Contents
 --------
