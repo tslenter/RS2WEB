@@ -1,8 +1,7 @@
-Welcome to RSv2 documentation!
+Welcome to RSL documentation!
 ===================================
 
-Remote Syslog version 2 is a syslog viewer built on Laravel. 
-The webinterface is created by Ronald Gerits and Tom Slenter.
+Remote Syslog Laravel is a Remote Syslog Development kit. 
 More information can be found on https://www.remotesyslog.com/
 
 This is a part of the masterscript: https://www.github.com/tslenter/RS
