@@ -6,7 +6,7 @@ Usage
 Installation
 ------------
 
-To use RSv2, download the masterscript:
+To use RSL, download the masterscript:
 
 .. code-block:: console
 
@@ -33,8 +33,8 @@ Select the following options to install the RSv2 webinterface:
 
 .. code-block:: console
 
-   Option 3 => RSv2 webinterface installation
-   Option 1 => RSv2 installation
+   Option 3 => RSL webinterface installation
+   Option 1 or 2 => To restore a backup or clean install Laravel project
 
 Deinstallation
 ------------
@@ -53,6 +53,6 @@ Select the following options to deinstall the webinterface:
 
 .. code-block:: console
 
-   Option 3 => RSv2 webinterface installation
-   Option 2 => RSv2 removal
+   Option 3 => RSL webinterface installation
+   Option 2 => RSL removal
  
