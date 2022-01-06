@@ -137,7 +137,7 @@ function install_backup_project()
 
    sed -i "s|\dummy|${PASS}|" $APACHEDIR/rsl/.env >/dev/null 2>&1
 
-   runuser -l rs -c "cd $APACHEDIR/rsv2 && php artisan migrate --force"
+   runuser -l rs -c "cd $APACHEDIR/rsl && php artisan migrate --force"
 
    #sed -i "s/\brspassword\b/$PASS/g" $APACHEDIR/rsl/database/seeders/UserSeeder.php
 
