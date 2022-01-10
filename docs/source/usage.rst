@@ -1,4 +1,4 @@
-Usage RSL
+Usage
 =====
 
 .. _installation:
